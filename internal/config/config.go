@@ -44,7 +44,7 @@ func getConfigFilePath() (string, error) {
 		return "", err
 	}
 
-	path := homePath + "/bootdev/gator/" + configFileName
+	path := homePath + "/" + configFileName
 
 	return path, nil
 }
