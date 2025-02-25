@@ -12,38 +12,42 @@ type state struct {
 }
 
 type command struct {
-	name string
-	args []string
+	Name string
+	Args []string
 }
 
 type commands struct {
-	cli map[string]func(*state, command) error
+	regCmds map[string]func(*state, command) error
 }
 
 func handlerLogin(s *state, cmd command) error {
-	if cmd.args == nil {
+	if cmd.Args == nil {
 		return errors.New("login handler expects a single argument: <username>")
 	}
 
-	err := s.SetUser(cmd.args[0])
+	err := s.SetUser(cmd.Args[0])
 	if err != nil {
 		return errors.New("couldn't write username to config file")
 	}
 
-	fmt.Printf("%s is login!\n", cmd.args[0])
+	fmt.Printf("%s is login!\n", cmd.Args[0])
 	return nil
 }
 
 func (c *commands) register(name string, f func(*state, command) error) {
-	c.cli[name] = f
+	c.regCmds[name] = f
 }
 
 func (c *commands) run(s *state, cmd command) error {
 	// key -> cmd.name
 	// value -> func(*state, command) error
-	f, exists := c.cli[cmd.name]
+	f, exists := c.regCmds[cmd.Name]
 	if !exists {
 		return errors.New("unkown command")
+	}
+
+	if len(cmd.Args) == 0 {
+		return errors.New("username is required")
 	}
 
 	err := f(s, cmd)
