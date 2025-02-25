@@ -8,19 +8,25 @@ import (
 	"github.com/MimiValsi/gator/internal/config"
 )
 
-func main() {
-	s := new(state)
+type state struct {
+	cfg *config.Config
+}
 
+func main() {
 	cfg, err := config.Read()
 	if err != nil {
 		log.Fatalf("error reading config: %s\n", err)
 	}
 
-	s.Config = &cfg
+	// Bad initialization
+	// s.Config = &cfg
+	progState := &state{
+		cfg: &cfg,
+	}
 
 	args := os.Args
 	if len(args) < 2 {
-		fmt.Println("usage: gator <cmd> <options>")
+		fmt.Println("usage: gator <cmd> [args...]")
 		os.Exit(1)
 	}
 
@@ -30,13 +36,15 @@ func main() {
 	}
 
 	cmds := commands{
-		RegCmds: make(map[string]func(*state, command) error),
+		regCmds: make(map[string]func(*state, command) error),
 	}
 
-	cmds.register(cmd.Name, handlerLogin)
-	err = cmds.run(s, cmd)
+	// ambigouos maneuver
+	// cmds.register(cmd.Name, handlerLogin)
+	cmds.register("login", handlerLogin)
+
+	err = cmds.run(progState, cmd)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 }
