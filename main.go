@@ -18,17 +18,25 @@ func main() {
 
 	s.Config = &cfg
 
-	cmds := commands{
-		cli: make(map[string]func(*state, command) error),
-	}
-
 	args := os.Args
 	if len(args) < 2 {
 		fmt.Println("usage: gator <cmd> <options>")
-		os.Exit(-1)
+		os.Exit(1)
 	}
 
-	if args[1] == "login" {
-		cmds.cli[args[1]] = handlerLogin
+	cmd := command{
+		Name: args[1],
+		Args: args[2:],
+	}
+
+	cmds := commands{
+		RegCmds: make(map[string]func(*state, command) error),
+	}
+
+	cmds.register(cmd.Name, handlerLogin)
+	err = cmds.run(s, cmd)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
 }
