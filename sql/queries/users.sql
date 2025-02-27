@@ -14,4 +14,5 @@ SELECT id, created_at, updated_at, name FROM users WHERE name = $1;
 -- name: TruncateTable :exec
 TRUNCATE TABLE users;
 
--- name
+-- name: GetUsers :many
+SELECT name FROM users;
