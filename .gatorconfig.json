@@ -1,6 +1,4 @@
 {
-        "db_url":"postgres://postgres:@localhost:5432/gator?sslmode=disable",
-        "current_user_name":"mike",
-
-
+  "db_url": "postgres://postgres:@localhost:5432/gator?sslmode=disable",
+  "current_user_name": "mike"
 }
