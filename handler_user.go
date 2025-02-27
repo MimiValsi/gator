@@ -15,19 +15,15 @@ func handlerLogin(s *state, cmd command) error {
 		return fmt.Errorf("usage: %s <name>", cmd.Name)
 	}
 
+	name := cmd.Args[0]
 	ctx := context.Background()
-	dbName, err := s.db.GetUser(ctx)
+	_, err := s.db.GetUser(ctx, name)
 	if err != nil {
-		return fmt.Errorf("couldn't access database, %w", err)
-	}
-
-	inputName := cmd.Args[0]
-	if dbName != inputName {
-		return fmt.Errorf("user doesn't exist")
+		return fmt.Errorf("couldn't find user, %w", err)
 	}
 
 	// cmd.Args[0] -> user name
-	err = s.cfg.SetUser(inputName)
+	err = s.cfg.SetUser(name)
 	if err != nil {
 		return fmt.Errorf("couldn't set current user: %w", err)
 	}
