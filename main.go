@@ -56,6 +56,7 @@ func main() {
 	// cmds.register(cmd.Name, handlerLogin)
 	cmds.register("login", handlerLogin)
 	cmds.register("register", handlerRegister)
+	cmds.register("reset", handlerReset)
 
 	err = cmds.run(progState, cmd)
 	if err != nil {
