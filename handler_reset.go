@@ -6,7 +6,7 @@ import (
 )
 
 func handlerReset(s *state, cmd command) error {
-	err := s.db.DropUsersTable(context.Background())
+	err := s.db.TruncateTable(context.Background())
 	if err != nil {
 		return fmt.Errorf("couldn't reset table: %w", err)
 	}

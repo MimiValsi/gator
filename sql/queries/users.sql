@@ -11,5 +11,7 @@ RETURNING *;
 -- name: GetUser :one
 SELECT id, created_at, updated_at, name FROM users WHERE name = $1;
 
--- name: DropUsersTable :exec
+-- name: TruncateTable :exec
 TRUNCATE TABLE users;
+
+-- name

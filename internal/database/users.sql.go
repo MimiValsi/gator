@@ -47,15 +47,6 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	return i, err
 }
 
-const dropUsersTable = `-- name: DropUsersTable :exec
-TRUNCATE TABLE users
-`
-
-func (q *Queries) DropUsersTable(ctx context.Context) error {
-	_, err := q.db.ExecContext(ctx, dropUsersTable)
-	return err
-}
-
 const getUser = `-- name: GetUser :one
 SELECT id, created_at, updated_at, name FROM users WHERE name = $1
 `
@@ -70,4 +61,13 @@ func (q *Queries) GetUser(ctx context.Context, name string) (User, error) {
 		&i.Name,
 	)
 	return i, err
+}
+
+const truncateTable = `-- name: TruncateTable :exec
+TRUNCATE TABLE users
+`
+
+func (q *Queries) TruncateTable(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, truncateTable)
+	return err
 }
