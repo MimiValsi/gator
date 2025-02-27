@@ -62,6 +62,12 @@ func handlerRegister(s *state, cmd command) error {
 	}
 
 	fmt.Println("User created successfully!")
+	printUser(user)
 
 	return nil
+}
+
+func printUser(user database.User) {
+	fmt.Printf(" * ID:	%v\n", user.ID)
+	fmt.Printf(" * Name:	%v\n", user.Name)
 }
