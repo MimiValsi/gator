@@ -51,14 +51,14 @@ func handlerRegister(s *state, cmd command) error {
 	}
 
 	ctx := context.Background()
-	_, err := s.db.CreateUser(ctx, createUser)
+	user, err := s.db.CreateUser(ctx, createUser)
 	if err != nil {
-		return fmt.Errorf("user already exist, %w", err)
+		return fmt.Errorf("couldn't create user: %w", err)
 	}
 
-	err = s.cfg.SetUser(name)
+	err = s.cfg.SetUser(user.Name)
 	if err != nil {
-		return fmt.Errorf("couldn't register current user, %w", err)
+		return fmt.Errorf("couldn't register current user: %w", err)
 	}
 
 	fmt.Println("User created successfully!")
