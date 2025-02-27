@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"os"
@@ -8,10 +9,12 @@ import (
 	_ "github.com/lib/pq"
 
 	"github.com/MimiValsi/gator/internal/config"
+	"github.com/MimiValsi/gator/internal/database"
 )
 
 type state struct {
 	cfg *config.Config
+	db  *database.Queries
 }
 
 func main() {
@@ -41,12 +44,22 @@ func main() {
 		regCmds: make(map[string]func(*state, command) error),
 	}
 
+	db, err := sql.Open("postgres", cfg.Db_url)
+	if err != nil {
+		log.Fatal("couldn't connect to database")
+	}
+
+	dbQueries := database.New(db)
+	progState.db = dbQueries
+
 	// ambigouos maneuver
 	// cmds.register(cmd.Name, handlerLogin)
 	cmds.register("login", handlerLogin)
+	cmds.register("register", handlerRegister)
 
 	err = cmds.run(progState, cmd)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 }
