@@ -1,2 +1,2 @@
 -- name: GetUser :one
-SELECT name FROM users;
+SELECT id, created_at, updated,at, name FROM users WHERE name = $1;
