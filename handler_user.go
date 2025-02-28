@@ -64,6 +64,24 @@ func handlerRegister(s *state, cmd command) error {
 }
 
 func handlerGetUsers(s *state, cmd command) error {
+	ctx := context.Background()
+	users, err := s.db.GetUsers(ctx)
+	if err != nil {
+		return fmt.Errorf("couldn't fetch users: %w", err)
+	}
+
+	current, err := s.db.GetUser(ctx, s.cfg.CurrentUserName)
+	if err != nil {
+		return fmt.Errorf("couldn't fetch current user: %w", err)
+	}
+
+	for _, name := range users {
+		if name == current.Name {
+			fmt.Printf("%s (current)\n", name)
+			continue
+		}
+		fmt.Printf("%s\n", name)
+	}
 	return nil
 }
 
