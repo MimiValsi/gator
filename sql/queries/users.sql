@@ -15,7 +15,7 @@ where name = $1
 ;
 
 -- name: TruncateUsers :exec
-TRUNCATE TABLE users CASCADE;
+TRUNCATE TABLE users;
 
 -- name: GetUsers :many
 select name
