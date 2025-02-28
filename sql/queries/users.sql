@@ -9,16 +9,14 @@ VALUES (
 RETURNING *;
 
 -- name: GetUser :one
-select id, created_at, updated_at, name
-from users
-where name = $1
-;
+SELECT id, created_at, updated_at, name
+  FROM users
+WHERE name = $1;
 
 -- name: TruncateUsers :exec
-TRUNCATE TABLE users;
+DELETE FROM users;
 
 -- name: GetUsers :many
-select name
-from users
-;
+SELECT name
+FROM users;
 
