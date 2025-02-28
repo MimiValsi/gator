@@ -6,6 +6,7 @@ import (
 	"html"
 	"io"
 	"net/http"
+	"time"
 )
 
 type RSSFeed struct {
@@ -25,8 +26,9 @@ type RSSItem struct {
 }
 
 func fetchRSS(ctx context.Context, feedURL string) (*RSSFeed, error) {
-	rssFeed := &RSSFeed{}
-	client := &http.Client{}
+	httpClient := &http.Client{
+		Timeout: 10 * time.Second,
+	}
 
 	req, err := http.NewRequestWithContext(ctx, "GET", feedURL, nil)
 	if err != nil {
@@ -34,18 +36,19 @@ func fetchRSS(ctx context.Context, feedURL string) (*RSSFeed, error) {
 	}
 	req.Header.Set("User-Agent", "gator")
 
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-
-	bytes, err := io.ReadAll(resp.Body)
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
 
-	err = xml.Unmarshal(bytes, rssFeed)
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	rssFeed := &RSSFeed{}
+	err = xml.Unmarshal(data, rssFeed)
 	if err != nil {
 		return nil, err
 	}
