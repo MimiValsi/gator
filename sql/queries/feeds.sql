@@ -1,5 +1,5 @@
 -- name: CreateFeed :one
-INSERT INTO feeds(id, created_at, updated_at, name, url, user_id)
+INSERT INTO feeds (id, created_at, updated_at, name, url, user_id)
 VALUES (
   $1,
   $2,
@@ -9,4 +9,7 @@ VALUES (
   $6
 )
 RETURNING *;
+
+-- name: TruncateFeeds :exec
+TRUNCATE TABLE feeds;
 
