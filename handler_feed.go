@@ -16,6 +16,11 @@ func handlerListFeeds(s *state, cmd command) error {
 		return fmt.Errorf("couldn't list feeds: %w", err)
 	}
 
+	if len(feeds) == 0 {
+		fmt.Println("No feeds found.")
+		return nil
+	}
+
 	for _, feed := range feeds {
 		fmt.Printf("Feed Name: %v\n", feed.Name)
 		fmt.Printf("Feed Url:  %v\n", feed.Url)
