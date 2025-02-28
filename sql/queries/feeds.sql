@@ -10,6 +10,3 @@ VALUES (
 )
 RETURNING *;
 
--- name: TruncateFeeds :exec
-TRUNCATE TABLE feeds;
-
