@@ -10,6 +10,21 @@ import (
 	"github.com/MimiValsi/gator/internal/database"
 )
 
+func handlerListFeeds(s *state, cmd command) error {
+	feeds, err := s.db.GetFeeds(context.Background())
+	if err != nil {
+		return fmt.Errorf("couldn't list feeds: %w", err)
+	}
+
+	for _, feed := range feeds {
+		fmt.Printf("Feed Name: %v\n", feed.Name)
+		fmt.Printf("Feed Url:  %v\n", feed.Url)
+		fmt.Printf("User Name: %v\n", feed.Name_2)
+		fmt.Println()
+	}
+	return nil
+}
+
 func handlerAddFeed(s *state, cmd command) error {
 	if len(cmd.Args) != 2 {
 		return fmt.Errorf("usage: %s <name> <url>", cmd.Name)
