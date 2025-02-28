@@ -7,17 +7,12 @@ import (
 
 func handlerReset(s *state, cmd command) error {
 	ctx := context.Background()
-
-	err := s.db.TruncateFeeds(ctx)
+	err := s.db.TruncateUsers(ctx)
 	if err != nil {
-		return fmt.Errorf("couln't reset feeds: %w", err)
-	}
-	err = s.db.TruncateUsers(ctx)
-	if err != nil {
-		return fmt.Errorf("couldn't reset users: %w", err)
+		return fmt.Errorf("couldn't reset table: %w", err)
 	}
 
-	fmt.Println("Tables successfully reset!")
+	fmt.Println("Table successfully reset!")
 
 	return nil
 }
