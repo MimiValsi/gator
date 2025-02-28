@@ -10,7 +10,7 @@ func handlerAgg(s *state, cmd command) error {
 	url := "https://www.wagslane.dev/index.xml"
 	rssFeed, err := fetchRSS(ctx, url)
 	if err != nil {
-		return err
+		return fmt.Errorf("couldn't fetch feed: %w", err)
 	}
 
 	fmt.Printf("%+v\n", rssFeed)
