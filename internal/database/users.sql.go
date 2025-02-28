@@ -48,7 +48,9 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, created_at, updated_at, name FROM users WHERE name = $1
+select id, created_at, updated_at, name
+from users
+where name = $1
 `
 
 func (q *Queries) GetUser(ctx context.Context, name string) (User, error) {
@@ -64,7 +66,8 @@ func (q *Queries) GetUser(ctx context.Context, name string) (User, error) {
 }
 
 const getUsers = `-- name: GetUsers :many
-SELECT name FROM users
+select name
+from users
 `
 
 func (q *Queries) GetUsers(ctx context.Context) ([]string, error) {
@@ -90,11 +93,11 @@ func (q *Queries) GetUsers(ctx context.Context) ([]string, error) {
 	return items, nil
 }
 
-const truncateTable = `-- name: TruncateTable :exec
-TRUNCATE TABLE users
+const truncateUsers = `-- name: TruncateUsers :exec
+TRUNCATE TABLE users CASCADE
 `
 
-func (q *Queries) TruncateTable(ctx context.Context) error {
-	_, err := q.db.ExecContext(ctx, truncateTable)
+func (q *Queries) TruncateUsers(ctx context.Context) error {
+	_, err := q.db.ExecContext(ctx, truncateUsers)
 	return err
 }
