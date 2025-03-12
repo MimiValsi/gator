@@ -37,7 +37,7 @@ func handlerFollow(s *state, cmd command) error {
 	
 	//fmt.Printf("feed name: %s\n", feed)
 	//fmt.Printf("feed name: %+v\n", feedParams)
-	ffRow, err = s.db.CreateFeedFollow(ctx, feedParams)
+	ffRow, err := s.db.CreateFeedFollow(ctx, feedParams)
 	if err != nil {
 		return fmt.Errorf("couldn't create feed follow: %w", err)
 	}
@@ -55,7 +55,7 @@ func handlerListFeedFollow(s *state, cmd command) error {
 		return err
 	}
 
-	feedFollows, err := s.db.GetFeedFollowsForUser(context.Background(), user.ID)
+	feedFollows, err := s.db.GetFeedFollowForUser(context.Background(), user.ID)
 	if err != nil {
 		return fmt.Errorf("couldn't get feed follow: %w", err)
 	}
@@ -65,7 +65,7 @@ func handlerListFeedFollow(s *state, cmd command) error {
 		return nil
 	}
 
-	fmt.Printf("Feed follows for user %s:", user.Name)
+	fmt.Printf("Feed follows for user %s:\n", user.Name)
 	for _, ff := range feedFollows {
 		fmt.Printf("* %s\n", ff.FeedName)
 	}
