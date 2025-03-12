@@ -36,7 +36,7 @@ func handlerFollow(s *state, cmd command, user database.User) error {
 }
 
 func handlerListFeedFollow(s *state, cmd command, user database.User) error {
-	feedFollows, err := s.db.GetFeedFollowForUser(context.Background(), user.ID)
+	feedFollows, err := s.db.GetFeedFollowsForUser(context.Background(), user.ID)
 	if err != nil {
 		return fmt.Errorf("couldn't get feed follows: %w", err)
 	}
