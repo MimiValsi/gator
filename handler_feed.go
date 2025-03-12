@@ -30,17 +30,17 @@ func handlerListFeeds(s *state, cmd command) error {
 	return nil
 }
 
-func handlerAddFeed(s *state, cmd command) error {
+func handlerAddFeed(s *state, cmd command, user database.User) error {
 	if len(cmd.Args) != 2 {
 		return fmt.Errorf("usage: %s <name> <url>", cmd.Name)
 	}
 
 	// s.cfg.CurrentUserName
 	ctx := context.Background()
-	current, err := s.db.GetUser(ctx, s.cfg.CurrentUserName)
-	if err != nil {
-		return fmt.Errorf("couldn't find user: %w", err)
-	}
+	//current, err := s.db.GetUser(ctx, s.cfg.CurrentUserName)
+	//if err != nil {
+	//	return fmt.Errorf("couldn't find user: %w", err)
+	//}
 
 	timeNow := time.Now().UTC()
 	feedName := cmd.Args[0]
@@ -51,7 +51,7 @@ func handlerAddFeed(s *state, cmd command) error {
 		UpdatedAt: timeNow,
 		Name:      feedName,
 		Url:       url,
-		UserID:    current.ID,
+		UserID:    user.ID,
 	}
 
 	feed, err := s.db.CreateFeed(ctx, createFeed)
