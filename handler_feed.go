@@ -35,12 +35,7 @@ func handlerAddFeed(s *state, cmd command, user database.User) error {
 		return fmt.Errorf("usage: %s <name> <url>", cmd.Name)
 	}
 
-	// s.cfg.CurrentUserName
 	ctx := context.Background()
-	//current, err := s.db.GetUser(ctx, s.cfg.CurrentUserName)
-	//if err != nil {
-	//	return fmt.Errorf("couldn't find user: %w", err)
-	//}
 
 	timeNow := time.Now().UTC()
 	feedName := cmd.Args[0]
