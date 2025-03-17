@@ -2,11 +2,8 @@ package main
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"time"
-
-	"github.com/MimiValsi/gator/internal/database"
 )
 
 func handlerAgg(s *state, cmd command) error {
@@ -21,13 +18,11 @@ func handlerAgg(s *state, cmd command) error {
 		return fmt.Errorf("Invalid time format: %w", err)
 	}
 	
-	fmt.Printf("Collection feeds every %v\n", timeBetweenReqs)
+	fmt.Printf("Collection feeds every %v...\n", timeBetweenReqs)
 	ticker := time.NewTicker(timeBetweenReqs)
 	for ;; <-ticker.C {
 		scrapeFeeds(s)
 	}
-	
-	//return nil
 }
 
 func scrapeFeeds(s *state) error {
@@ -37,17 +32,7 @@ func scrapeFeeds(s *state) error {
 		return fmt.Errorf("couldn't get next feed fetch: %w", err)
 	}
 
-	tn := time.Now().UTC()
-	markFeed := database.MarkFeedFetchedParams{
-		UpdatedAt: tn,
-		LastFetchedAt: sql.NullTime{
-			Time: tn,
-			Valid: true,
-		},
-		ID: feed.ID,
-	}
-
-	err = s.db.MarkFeedFetched(ctx, markFeed)
+	_, err = s.db.MarkFeedFetched(ctx, feed.ID)
 	if err != nil {
 		return fmt.Errorf("couldn't mark fetched feed: %w", err)
 	}
@@ -57,8 +42,9 @@ func scrapeFeeds(s *state) error {
 		return fmt.Errorf("couldn't fetch rss: %w", err)
 	}
 
-	for _, item := range rss.Channel.Items {
+	for _, item := range rss.Channel.Item {
 		fmt.Println(item.Title)
 	}
+	fmt.Printf("Feed %s collected, %v posts found\n", feed.Name, len(rss.Channel.Item))
 	return nil
 }
