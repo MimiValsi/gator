@@ -12,17 +12,15 @@ RETURNING *;
 --
 
 -- name: GetFeeds :many
-SELECT id, created_at, updated_at, name, url, name, user_id, last_fetched_at
-  FROM feeds;
+SELECT * FROM feeds;
 --
 
 -- name: GetFeedByURL :one
-SELECT id, created_at, updated_at, name, url, user_id, last_fetched_at
-  FROM feeds
+SELECT * FROM feeds
 WHERE url = $1;
 --
 
--- name: MarkFeedFetched :exec
+-- name: MarkFeedFetched :one
 UPDATE feeds
   SET updated_at = NOW(),
       last_fetched_at = NOW()
@@ -31,8 +29,7 @@ RETURNING *;
 --
 
 -- name: GetNextFeedtoFetch :one
-SELECT *
-  FROM feeds
+SELECT * FROM feeds
 ORDER BY last_fetched_at ASC NULLS FIRST
 LIMIT 1;
 --
