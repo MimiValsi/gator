@@ -11,7 +11,8 @@ import (
 )
 
 func handlerListFeeds(s *state, cmd command) error {
-	feeds, err := s.db.GetFeeds(context.Background())
+	ctx := context.Background()
+	feeds, err := s.db.GetFeeds(ctx)
 	if err != nil {
 		return fmt.Errorf("couldn't list feeds: %w", err)
 	}
@@ -21,10 +22,14 @@ func handlerListFeeds(s *state, cmd command) error {
 		return nil
 	}
 
+	fmt.Printf("Found %d feeds\n", len(feeds))
 	for _, feed := range feeds {
-		fmt.Printf("Feed Name: %v\n", feed.Name)
-		fmt.Printf("Feed Url:  %v\n", feed.Url)
-		fmt.Printf("User Name: %v\n", feed.Name_2)
+		user, err := s.db.GetUserByID(ctx, feed.UserID)
+		if err != nil {
+			return fmt.Errorf("couldn't get user: %w", err)
+		}
+		printFeed(feed, user)
+		fmt.Printf("================================")
 		fmt.Println()
 	}
 	return nil
@@ -40,6 +45,7 @@ func handlerAddFeed(s *state, cmd command, user database.User) error {
 	timeNow := time.Now().UTC()
 	feedName := cmd.Args[0]
 	url := cmd.Args[1]
+	
 	createFeed := database.CreateFeedParams{
 		ID:        uuid.New(),
 		CreatedAt: timeNow,
@@ -66,9 +72,9 @@ func handlerAddFeed(s *state, cmd command, user database.User) error {
 		return fmt.Errorf("couldn't create feed follow: %w", err)
 	}
 
-	fmt.Println("Feed created successuflly!")
+	fmt.Println("Feed created suc2cessuflly!")
 	fmt.Println("====================")
-	printFeed(feed)
+	printFeed(feed, user)
 	fmt.Println("Feed following successfully:")
 	printFeedFollow(feedFollow.UserName, feedFollow.FeedName)
 	fmt.Println("====================")
@@ -76,11 +82,11 @@ func handlerAddFeed(s *state, cmd command, user database.User) error {
 	return nil
 }
 
-func printFeed(feed database.Feed) {
+func printFeed(feed database.Feed, user database.User) {
 	fmt.Printf("* ID:            %s\n", feed.ID)
 	fmt.Printf("* Created:       %v\n", feed.CreatedAt)
 	fmt.Printf("* Updated:       %v\n", feed.UpdatedAt)
 	fmt.Printf("* Name:          %s\n", feed.Name)
 	fmt.Printf("* URL:           %s\n", feed.Url)
-	fmt.Printf("* UserID:        %s\n", feed.UserID)
+	fmt.Printf("* User:          %s\n", user.Name)
 }
