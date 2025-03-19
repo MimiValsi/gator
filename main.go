@@ -62,7 +62,7 @@ func main() {
 	cmds.register("follow", middlewareLoggedIn(handlerFollow))
 	cmds.register("following", middlewareLoggedIn(handlerListFeedFollow))
 	cmds.register("unfollow", middlewareLoggedIn(handlerUnfollow))
-	cmds.register("browse", handlerBrowse)
+	cmds.register("browse", middlewareLoggedIn(handlerBrowse))
 
 	err = cmds.run(progState, cmd)
 	if err != nil {
