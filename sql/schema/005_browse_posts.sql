@@ -5,8 +5,8 @@ CREATE TABLE posts (
   updated_at TIMESTAMP NOT NULL,
   title VARCHAR NOT NULL,
   url VARCHAR NOT NULL UNIQUE,
-  description VARCHAR NOT NULL,
-  published_at TIMESTAMP NOT NULL,
+  description VARCHAR,
+  published_at TIMESTAMP,
   feed_id UUID NOT NULL REFERENCES feeds(id) ON DELETE CASCADE
 );
 
