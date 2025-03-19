@@ -13,18 +13,18 @@ Simply go install may suffice
 If not then go build after install
 
 ## Usage
-Here's the list of all commands available:
-login - login with registered user
-register - create a new user
-reset - delete every information in DB
-users - display every registered user and show which is currently in use
-agg - fetch infos from known URL (already registered in DB)
-addfeed - create a new feed by inserting it's name and URL
-feeds - display all known feeds
-follow - follow a specific feed (let's multiple user follow a feed)
-following - display every user following a feed
-unfollow - unfollow a feed
-browse - display every feed following by current userx
+Here's the list of all commands available:\
+login - login with registered user\
+register - create a new user\
+reset - delete every information in DB\
+users - display every registered user and show which is currently in use\
+agg - fetch infos from known URL (already registered in DB)\
+addfeed - create a new feed by inserting it's name and URL\
+feeds - display all known feeds\
+follow - follow a specific feed (let's multiple user follow a feed)\
+following - display every user following a feed\
+unfollow - unfollow a feed\
+browse - display every feed following by current userx\
 
 First need to register a user:
 ./gator register foo
